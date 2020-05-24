@@ -1,2 +1,1 @@
-# james_801058172
-ITIS 4166
+This is the initial README file for the course
