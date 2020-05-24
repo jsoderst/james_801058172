@@ -1,2 +1,3 @@
-# james_801058172
-ITIS 4166
+# ITIS 4166
+**Name:** James Soderstrom   
+**ID:** 801058172
