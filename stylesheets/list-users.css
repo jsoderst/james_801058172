@@ -1,0 +1,17 @@
+.op-result-wrapper {
+    display: block;
+    height: 10%;
+    width: 100%;
+    text-align: center;
+}
+
+.op-result-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#list-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}

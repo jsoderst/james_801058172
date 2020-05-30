@@ -1,0 +1,40 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.full-page-bg {
+    height: 100%;
+    margin: 0;
+    background-image: url(https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.form-wrapper {
+    width: 40%;
+    margin: 20%;
+    padding: 2vh;
+    display: inline-block;
+    vertical-align: center;
+    color: rgb(0, 0, 0);
+    background-color: rgba(170, 152, 152, 0.37);
+    box-shadow: .1vh .1vh .1vw .1vw #313131;
+    border-radius: 2vh;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    margin-top: 1%;
+}
+
+input[type=submit] {
+    padding: 1%;
+    width: 20%;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(103, 202, 103);
+}

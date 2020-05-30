@@ -1,0 +1,37 @@
+html {
+    background-color: #FFFFFF;
+    font-family: Arial;
+}
+
+.header-link-text {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    padding-top: 2vh;
+    text-align: center;
+}
+
+.op-result-wrapper {
+    display: block;
+    height: 10%;
+    width: 100%;
+    text-align: center;
+}
+
+.op-result-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+td {
+    padding: 1%;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.icon {
+    cursor: pointer;
+}
