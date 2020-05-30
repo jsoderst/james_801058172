@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+input[type=text], textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1%;
+    resize: vertical;
+    margin-top: 1%;
+}
+
+input[type=submit] {
+    background-color: whitesmoke;
+    padding: 1%;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: rgb(103, 202, 103);
+}
+
+.form-wrapper {
+    padding: 3%;
+    border-radius: 2vh;
+    background-color: rgb(95, 148, 192);
+}

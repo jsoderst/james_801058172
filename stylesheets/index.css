@@ -1,0 +1,50 @@
+header {
+    text-align: right;
+}
+
+.bg-banner-image-wrapper {
+    width: 102%;
+    margin-left: -1vw;
+    height: 43vh;
+    padding-top: 1vh;
+}
+
+.bg-banner-image {
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+}
+
+.blog-entries {
+    height: 43vh;
+    padding-top: 2vh;
+}
+
+.blog-entry-left {
+    height: 43vh;
+    box-shadow: .25vh .25vh .25vw .25vw #808080;
+    width: 47%;
+    text-align: center;
+    display: table;
+    float: left;
+    margin-left: 1vh;
+    cursor: pointer;
+    border-radius: 2vh;
+}
+
+.blog-entry-right {
+    height: 43vh;
+    box-shadow: .25vh .25vh .25vw .25vw #808080;
+    width: 47%;
+    text-align: center;
+    display: table;
+    float: right;
+    margin-right: 1vh;
+    cursor: pointer;
+    border-radius: 2vh;
+}
+
+.blog-text {
+    display: table-cell;
+    vertical-align: middle;
+}
