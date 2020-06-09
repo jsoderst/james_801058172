@@ -5,18 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="stylesheets/common.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+        <script type="text/javascript" src="scripts/common.js"></script>
         <title>Blog Homepage</title>
     </head>
 
     <body>
         <header>
-            <a href="font-resizer-link" class="header-link-text">Font Resizer | </a>
-            <a href="style-switcher-link" class="header-link-text">Style Switcher | </a>
+            <a href="#" class="header-link-text" onclick="resizeFont()">Font Resizer | </a>
+            <a href="#" class="header-link-text" onclick="changeBackground()">Style Switcher | </a>
             <a href="admin/login.html" class="header-link-text">Admin Login</a>
         </header>
 
         <div class="bg-banner-image-wrapper">
-            <img class="bg-banner-image" src="images/home-background.jpeg" alt="Picture of Road">
+            <input type="button" id="top-btn" class="btn-on-bg" onclick="changeBackground(0)">
+            <input type="button" id="mid-btn" class="btn-on-bg" onclick="changeBackground(1)">
+            <input type="button" id="bottom-btn" class="btn-on-bg" onclick="changeBackground(2)">
+            <img class="bg-banner-image" id="home-background" src="images/home-background.jpeg" alt="Picture of Road">
         </div>
 
         <div class="blog-entries">
