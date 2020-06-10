@@ -5,14 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="stylesheets/common.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
-        <script type="text/javascript" src="scripts/common.js"></script>
         <title>Blog Homepage</title>
     </head>
 
     <body>
         <header>
-            <a href="#" class="header-link-text" onclick="resizeFont()">Font Resizer | </a>
-            <a href="#" class="header-link-text" onclick="changeBackground()">Style Switcher | </a>
+            <a href="#" class="header-link-text" id="font-resize">Font Resizer | </a>
+            <a href="#" class="header-link-text" id="style-switch">Style Switcher | </a>
             <a href="admin/login.html" class="header-link-text">Admin Login</a>
         </header>
 
@@ -22,8 +21,24 @@
             <input type="button" id="bottom-btn" class="btn-on-bg" onclick="changeBackground(2)">
             <img class="bg-banner-image" id="home-background" src="images/home-background.jpeg" alt="Picture of Road">
         </div>
+        
+        <br><br>
+
+        <div class="control-wrapper">
+            <div class="slider-control">
+                <button class="slider-btn" id="play-slides">Play</button>
+                <button class="slider-btn" id="stop-slides">Stop</button>
+            </div>
+        </div>
 
         <div class="blog-entries">
+            <div class="single-blog-entry" onclick="location.href='post.html'">
+                <p class="blog-text">
+                    This is just a sample blog entry to help demo the slider capability.
+                </p>
+            </div>
+        </div>
+        <!-- <div class="blog-entries">
             <div onclick="location.href='post.html'" class="blog-entry-left">
                 <p class="blog-text">
                     Blog Entry 1
@@ -49,10 +64,12 @@
                     Blog Entry 4
                 </p>
             </div>
-        </div>
+        </div> -->
     </body>        
     
     <footer>
         Copyright &copy; 2020
     </footer>
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <script type="text/javascript" src="scripts/slider.js"></script>
 </html>
