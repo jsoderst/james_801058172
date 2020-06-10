@@ -3,9 +3,9 @@ header {
 }
 
 .bg-banner-image-wrapper {
-    width: 102%;
+    width: 101.5%;
     margin-left: -1vw;
-    height: 43vh;
+    height: 38vh;
     padding-top: 1vh;
 }
 
@@ -72,4 +72,52 @@ header {
 .blog-text {
     display: table-cell;
     vertical-align: middle;
+}
+
+.single-blog-entry {
+    display: table;
+    text-align: center;
+    box-shadow: .25vh .25vh .25vw .25vw #808080;
+    padding: 2vh;
+    margin: auto;
+    height: 50%;
+    width: 50%;
+    border-radius: 2vh;
+    cursor: pointer;
+}
+
+.control-wrapper {
+    width: 100%;
+}
+
+.slider-control {
+    height: 7vh;
+    display: table;
+    margin: auto;
+}
+
+.slider-btn {
+    display: table-cell;
+    width: 10vh;
+    height: 4vh;
+    border-radius: 1vh;
+    cursor: pointer;
+}
+
+#play-slides {
+    float: left;
+    margin-right: 1vh;
+}
+
+#stop-slides {
+    float: right;
+    margin-left: 1vh;
+}
+
+#play-slides:hover {
+    background-color: rgb(43, 129, 43)
+}
+
+#stop-slides:hover {
+    background-color: rgb(175, 30, 30);
 }
