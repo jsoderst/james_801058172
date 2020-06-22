@@ -10,7 +10,7 @@ function changeBackground(id = -1) {
         2. When one of the 3 buttons on the background is clicked, it will switch to a specific image. Each button is linked to a specific image. Repeatedly clicking the same button will not cause the image to continue to change.
     */
 
-    var backgrounds = ["images/home-background.jpeg","https://images.pexels.com/photos/627654/pexels-photo-627654.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260", "https://images.pexels.com/photos/1905045/pexels-photo-1905045.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"];
+    var backgrounds = ["../static/home-background.jpeg","https://images.pexels.com/photos/627654/pexels-photo-627654.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260", "https://images.pexels.com/photos/1905045/pexels-photo-1905045.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"];
     var alts = ["Picture of Road", "Picture of Mountains", "Picture of Water"];
 
     //to handle the case when a specific button is clicked
