@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-tutorial",
+  "version": "1.0.0",
+  "description": "tutorial",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "joy": "^0.1.1",
+    "lodash": "^4.17.15",
+    "sqlite3": "^4.2.0"
+  }
+}
