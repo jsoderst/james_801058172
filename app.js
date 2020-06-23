@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 // const sqlite3 = require(sqlite3).verbose();
 
+app.set('view engine', 'ejs');
 app.use('/public', express.static(path.join(__dirname, 'static')));
 
 app.get('/', (req, res)=>{
@@ -51,6 +52,16 @@ fs.readdir('static/scripts', (err, files)=>{
                 }
             });
         }
+    }
+});
+
+app.get('/post', (req, res)=>{
+    console.log(req.query);
+    if(!(Object.keys(req.query).length)){
+        res.render('post', {post_id: 'this should just be a random post or a fixed post for when no query string passed'});
+    }
+    else{
+    res.render('post', {post_id: 'this will render a post using the id given in query string'});
     }
 });
 
