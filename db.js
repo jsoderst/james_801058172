@@ -20,6 +20,22 @@ function createPostsTable(){
     db.close();
 }
 
+function createUsersTable(){
+    db.serialize(function(){
+        db.run('CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, username TEXT, password TEXT)');
+    });
+    db.close();
+}
+
+function manualUsers(id, username, password){
+    db.serialize(()=>{
+        var stmt = db.prepare('INSERT INTO users VALUES (?, ?, ?)');
+        stmt.run(id, username, password);
+        stmt.finalize();
+    });
+    db.close();
+}
+
 function manualPosts(id, title, content){
     db.serialize(()=>{
         var stmt = db.prepare('INSERT INTO posts VALUES (?, ?, ?)');
@@ -120,4 +136,20 @@ function getAllBlogPosts(){
     db.close();
 }
 
-module.exports = {manualPosts : manualPosts, nextID : nextID, connect : connect, getNextID : getNextID, createPostsTable : createPostsTable, getAllBlogPosts : getAllBlogPosts, getPost : getPost, addPost : addPost, updatePost : updatePost};
+function getAllUsers(){
+    db.serialize(function(){
+        db.each('SELECT * FROM users', (err, row)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log('id: ' + row.id);
+                console.log('username: ' + row.username);
+                console.log('password: ' + row.password);
+            }
+        });
+    });
+    db.close();
+}
+
+module.exports = {getAllUsers : getAllUsers, manualUsers : manualUsers, createUsersTable : createUsersTable, manualPosts : manualPosts, nextID : nextID, connect : connect, getNextID : getNextID, createPostsTable : createPostsTable, getAllBlogPosts : getAllBlogPosts, getPost : getPost, addPost : addPost, updatePost : updatePost};
