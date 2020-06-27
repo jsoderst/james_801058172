@@ -164,7 +164,10 @@ app.get('/add_post', (req, res)=>{
 
 app.post('/add_post', (req, res)=>{
     console.log(req.body);
-    db.addPost(req.body.title, req.body.content);
+    setTimeout(()=>{
+        db.addPost(req.body.title, req.body.content);
+    }, 2000);
+    res.redirect('/');
 });
 
 app.post('/upload', upload.single('upload'), (req, res)=>{
