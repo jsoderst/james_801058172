@@ -3,7 +3,7 @@
 **To start the server**
   - Run `node app.js`
 
-**The following post endpoints can be hit**
+**The following post endpoints can be hit. These endpoints do provide functionality.**
   - `localhost:3000/`
   - `localhost:3000/list_posts`
   - `localhost:3000/post?id=`
