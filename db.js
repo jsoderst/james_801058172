@@ -17,14 +17,12 @@ function createPostsTable(){
     db.serialize(function(){
         db.run('CREATE TABLE IF NOT EXISTS posts (id INT PRIMARY KEY, title TEXT, content TEXT)');
     });
-    db.close();
 }
 
 function createUsersTable(){
     db.serialize(function(){
         db.run('CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, username TEXT, password TEXT)');
     });
-    db.close();
 }
 
 function manualUsers(id, username, password){
@@ -33,7 +31,6 @@ function manualUsers(id, username, password){
         stmt.run(id, username, password);
         stmt.finalize();
     });
-    db.close();
 }
 
 function manualPosts(id, title, content){
@@ -42,7 +39,6 @@ function manualPosts(id, title, content){
         stmt.run(id, title, content);
         stmt.finalize();
     });
-    db.close();
 }
 
 function addPost(title, content){
@@ -56,7 +52,6 @@ function addPost(title, content){
         // stmt.run(id, content);
         // stmt.finalize();
     });
-    db.close();
 }
 
 function updatePost(id, content, title){
@@ -133,7 +128,6 @@ function getAllBlogPosts(){
             }
         });
     });
-    db.close();
 }
 
 function getAllUsers(){
@@ -149,7 +143,6 @@ function getAllUsers(){
             }
         });
     });
-    db.close();
 }
 
 module.exports = {getAllUsers : getAllUsers, manualUsers : manualUsers, createUsersTable : createUsersTable, manualPosts : manualPosts, nextID : nextID, connect : connect, getNextID : getNextID, createPostsTable : createPostsTable, getAllBlogPosts : getAllBlogPosts, getPost : getPost, addPost : addPost, updatePost : updatePost};
