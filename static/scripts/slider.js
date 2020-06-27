@@ -9,8 +9,8 @@ Clicking the stop button will terminate the loop. The loop will begin where it l
 document.getElementById("play-slides").addEventListener("click", start);
 document.getElementById("stop-slides").addEventListener("click", stopSlides);
 
-var entryText = ["This is just a sample blog entry to help demo the slider capability.", "This is another sample blog post that is meant to illustrate the slider capability. It is the second blog post from this award-winning series.", "This is the captivating finale to the three-part blog post entry series meant to illustrate the slider capability. What a wild ride it has been."];
-var index = 1;
+var entryText = ["This is the first post.", "This is the second post.", "This is the third post."];
+var index = 0;
 var loop;
 
 function start() {

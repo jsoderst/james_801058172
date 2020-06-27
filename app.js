@@ -1,68 +1,174 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-// const bodyparser = require('body-parser');
 // const joi = require('@hapi/joi');
 // const ejs = require('ejs');
+// const common = require('./static/scripts/common');
+// const eventEmitter = require('events');
+// const EventEmitter = require('events');
+// const eventEmitter = new EventEmitter;
+// const postURI = '/post?id=';
+const db = require('./db');
+const bodyparser = require('body-parser');
+const multer = require('multer');
+// const upload = require('express-fileupload');
+const path = require('path');
 const fs = require('fs');
-// const sqlite3 = require(sqlite3).verbose();
+const sqlite3 = require('sqlite3').verbose();
+const http = require('http');
+const express = require('express');
+const socketio = require('socket.io');
+const { urlencoded } = require('express');
+// const { urlencoded } = require('body-parser');
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
+const upload = multer({dest: './uploads'});
+
+const dbHandler = new sqlite3.Database('system_db', (err)=>{
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log('Database connection established in app.js');
+    }
+});
+
+function getPostContent(id){
+    return new Promise((reject, resolve)=>{
+        dbHandler.get(`SELECT content FROM posts WHERE id=${id}`, (err, row)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(row.content);
+            }
+        });
+    });
+}
+
+io.on('connect', socket =>{
+    console.log('connection established');
+
+    socket.on('postContent', postContent=>{
+        dbHandler.get(`SELECT id FROM posts WHERE content='${ postContent}'`, (err, row)=>{
+            if(err){
+                console.log(err);
+            }
+            else(socket.emit('postID', row.id));
+        });
+    });
+
+    socket.on('getEntries', ()=>{
+        getSliderEntries.then(result=>{socket.emit('sliderEntries', result)});
+    });
+});
 
 app.set('view engine', 'ejs');
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(bodyparser.json());
+
 app.use('/public', express.static(path.join(__dirname, 'static')));
 
 app.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, 'static', 'index.html'));
-});
-
-app.get('/images/home-background.jpeg', (req, res)=>{
-    res.sendFile(path.join(__dirname, 'static/images', 'home-background.jpeg'));
-});
-
-// serving static css files
-fs.readdir('static/stylesheets', (err, files)=>{
-    if(err){
-        console.log(err);
-    }
-    else{
-        for (let file of files){
-            app.get('/stylesheets/' + file, (req, res)=>{
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    res.sendFile(path.join(__dirname, 'static/stylesheets', file));
-                }
-            });
+    dbHandler.get('SELECT content FROM posts WHERE id=1', (err, row)=>{
+        if(err){
+            console.log(err);
         }
-    }
+        else{
+            res.render('index', {first_post: row.content});
+        }
+    });
 });
 
-fs.readdir('static/scripts', (err, files)=>{
-    if(err){
-        console.log(err);
+const getSliderEntries = new Promise((resolve, reject)=>{
+    var entries = [];
+    for (var i = 1; i < 4; i++){
+        dbHandler.get(`SELECT content FROM posts WHERE id=${ i }`, (err, row)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                entries.push(row.content);
+            }
+        });
     }
-    else{
-        for (let file of files){
-            app.get('/scripts/' + file, (req, res)=>{
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    res.sendFile(path.join(__dirname, 'static/scripts', file));
-                }
-            });
+    resolve(entries);
+});
+
+const posts = new Promise((resolve, reject)=>{
+    var result = [];
+    dbHandler.each('SELECT id,title FROM posts', (err, row)=>{
+        if(err){
+            reject(err);
         }
-    }
+        else{
+            result.push({post_id: row.id, post_title: row.title});
+        }
+    });
+    resolve(result);
+});
+
+app.get('/list_posts', (req, res)=>{
+    posts.then(result => res.render('list_posts', {posts: result}));
 });
 
 app.get('/post', (req, res)=>{
     console.log(req.query);
     if(!(Object.keys(req.query).length)){
-        res.render('post', {post_id: 'this should just be a random post or a fixed post for when no query string passed'});
+        dbHandler.get('SELECT title,content FROM posts WHERE id=1', (err, row)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.render('post', {content: row.content, title: row.title});
+            }
+        });
     }
     else{
-    res.render('post', {post_id: 'this will render a post using the id given in query string'});
+        dbHandler.get(`SELECT title,content FROM posts WHERE id=${ req.query.id }`, (err, row)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.render('post', {content: row.content, title: row.title});
+            }
+        });
     }
 });
 
-app.listen(3000);
+app.get('/update_post', (req, res)=>{
+    dbHandler.get(`SELECT title,content FROM posts WHERE id=${ req.query.id }`, (err, row)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('update_post', {id: req.query.id, title: row.title, content: row.content});
+        }
+    });
+});
+
+app.get('/add_post', (req, res)=>{
+    res.render('add_post');
+});
+
+app.post('/add_post', (req, res)=>{
+    console.log(req.body);
+    db.addPost(req.body.title, req.body.content);
+});
+
+app.post('/upload', upload.single('upload'), (req, res)=>{
+    var title = req.body.title;
+    fs.readFile('./uploads/' + req.file.filename, 'utf-8', (err, data)=>{
+        db.addPost(title, data);
+    });
+    setTimeout(()=>{
+        res.send('File uploaded');
+    }, 5000);
+});
+
+app.post('/update_post', (req, res)=>{
+    setTimeout(()=>{
+        res.redirect('/');
+    }, 3000);
+    db.updatePost(req.query.id, req.body.content, req.body.title);
+});
+
+server.listen(3000, console.log('Server running on port 3000'));

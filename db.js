@@ -1,7 +1,8 @@
-const sqlite3 = require('sqlite3').verbose(); 
+const sqlite3 = require('sqlite3').verbose();
+const db = connect();
 
 function connect(){
-    let db = new sqlite3.Database('system_db', (err)=>{
+    let db_instance = new sqlite3.Database('system_db', (err)=>{
         if(err){
             console.log(err);
         }
@@ -9,58 +10,101 @@ function connect(){
             console.log('Database connection established.');
         }
     });
-    return db;
+    return db_instance;
 }
 
-function getNextID(table){
-    var db = connect();
-    var nextID;
-
+function createPostsTable(){
     db.serialize(function(){
-        db.each(`SELECT id FROM ${ table } WHERE id=(SELECT MAX(id) FROM ${ table })`, (err, row)=>{
+        db.run('CREATE TABLE IF NOT EXISTS posts (id INT PRIMARY KEY, title TEXT, content TEXT)');
+    });
+    db.close();
+}
+
+function manualPosts(id, title, content){
+    db.serialize(()=>{
+        var stmt = db.prepare('INSERT INTO posts VALUES (?, ?, ?)');
+        stmt.run(id, title, content);
+        stmt.finalize();
+    });
+    db.close();
+}
+
+function addPost(title, content){
+    db.serialize(function(){
+        var stmt = db.prepare('INSERT INTO posts VALUES (?, ?, ?)');
+        getNextID('posts')
+        .then((id)=>{
+            stmt.run(id, title, content);
+            stmt.finalize();
+        });
+        // stmt.run(id, content);
+        // stmt.finalize();
+    });
+    db.close();
+}
+
+function updatePost(id, content, title){
+    db.serialize(function(){
+        db.run(`UPDATE posts SET content='${ content }',title='${ title }' WHERE id=${ id }`, (err)=> {
             if(err){
                 console.log(err);
             }
             else{
-                nextID = row.id + 1;
+                console.log('Entry updated');
             }
         });
     });
-
-    if(nextID === undefined){
-        nextID = 1;
-    }
-
-    db.close();
-    return nextID;
 }
 
-function createPostsTable(){
-    var db = connect();
+// const nextID = new Promise((resolve, reject)=>{
+//     var id;
+//     db.get('SELECT id FROM posts WHERE id=(SELECT MAX(id) FROM posts)', (err, row)=>{
+//         if(err){
+//             console.log(err);
+//             reject(err);
+//         }
+//         else{
+//             id = row.id + 1;
+//             resolve(id);
+//         }
+//     });
+// });
 
+// nextID.then(id => console.log(id));
+
+function getPost(id){
     db.serialize(function(){
-        db.run('CREATE TABLE IF NOT EXISTS posts (id INT PRIMARY KEY, content TEXT)');
+        db.get(`SELECT content FROM posts WHERE id=${ id }`, (err, row)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log(row.content);
+            }
+        });
     });
-
-    db.close();
 }
 
-function addPost(content){
-    var db = connect();
-    var id = getNextID('posts');
-
-    db.serialize(function(){
-        var stmt = db.prepare('INSERT INTO posts VALUES (?, ?)');
-        stmt.run(id, content);
-        stmt.finalize();
+function getNextID(table){
+    return new Promise((resolve,reject)=>{
+        var id;
+        db.get(`SELECT id FROM ${ table } WHERE id=(SELECT MAX(id) FROM ${ table })`, (err, row)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                id = row.id + 1;
+                resolve(id);
+            }
+        });
     });
+}
 
-    db.close();
+function nextID(){
+    getNextID('posts').then(id => console.log(id));
 }
 
 function getAllBlogPosts(){
-    var db = connect();
-
     db.serialize(function(){
         db.each('SELECT * FROM posts', (err, row)=>{
             if(err){
@@ -68,12 +112,12 @@ function getAllBlogPosts(){
             }
             else{
                 console.log('id: ' + row.id);
+                console.log('title: ' + row.title);
                 console.log('content: ' + row.content);
             }
         });
     });
-
     db.close();
 }
 
-module.exports = {createPostsTable : createPostsTable, getNextID : getNextID, getAllBlogPosts : getAllBlogPosts, addPost : addPost};
+module.exports = {manualPosts : manualPosts, nextID : nextID, connect : connect, getNextID : getNextID, createPostsTable : createPostsTable, getAllBlogPosts : getAllBlogPosts, getPost : getPost, addPost : addPost, updatePost : updatePost};
