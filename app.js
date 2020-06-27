@@ -106,6 +106,19 @@ const posts = new Promise((resolve, reject)=>{
     resolve(result);
 });
 
+const users = new Promise((resolve, reject)=>{
+    var result = [];
+    dbHandler.each('SELECT id,username FROM users', (err, row)=>{
+        if(err){
+            reject(err);
+        }
+        else{
+            result.push({user_id: row.id, username: row.username});
+        }
+    });
+    resolve(result);
+});
+
 app.get('/list_posts', (req, res)=>{
     posts.then(result => res.render('list_posts', {posts: result}));
 });
@@ -169,6 +182,47 @@ app.post('/update_post', (req, res)=>{
         res.redirect('/');
     }, 3000);
     db.updatePost(req.query.id, req.body.content, req.body.title);
+});
+
+app.get('/add_user', (req, res)=>{
+    res.render('add_user');
+});
+
+app.get('/list_users', (req, res)=>{
+    users.then(result => res.render('list_users', {users: result}));
+});
+
+app.get('/user', (req, res)=>{
+    dbHandler.get(`SELECT username,password FROM users WHERE id=${ req.query.id }`, (err, row)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('user', {username: row.username, password: row.password});
+        }
+    });
+});
+
+app.get('/update_user', (req, res)=>{
+    dbHandler.get(`SELECT username,password FROM users WHERE id=${ req.query.id }`, (err, row)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('update_user', {id: req.query.id, username: row.username, password: row.password});
+        }
+    });
+});
+
+app.get('/delete_user', (req, res)=>{
+    dbHandler.get(`SELECT username,password FROM users WHERE id=${ req.query.id }`, (err, row)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('delete_user', {id: req.query.id, username: row.username, password: row.password});
+        }
+    });
 });
 
 server.listen(3000, console.log('Server running on port 3000'));
